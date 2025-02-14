@@ -3,10 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class Peminjaman extends Model
 {
-    protected $fillable = "nama_penerbit";
-    protected $visible = "nama_penerbit";
-    protected $timestamps = true;
+    use HasFactory;
+
+    protected $fillable = ['user_id', 'buku_id', 'tanggal_pinjam', 'jatuh_tempo'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function buku()
+    {
+        return $this->belongsTo(Buku::class);
+    }
 }

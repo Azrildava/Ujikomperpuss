@@ -1,65 +1,29 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
 use App\Models\Peminjaman;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PeminjamanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function pinjamBuku($id)
     {
-        //
+        // Cek apakah buku tersedia
+        $buku = Buku::findOrFail($id);
+
+        // Simpan data peminjaman ke database
+        Peminjaman::create([
+            'user_id'         => Auth::id(),
+            'buku_id'         => $buku->id,
+            'tanggal_pinjam'  => now(), //Atur default peminjaman selama 7 hari
+        ]);
+
+        return redirect()->back()->with('success', 'Buku berhasil dipinjam!');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Peminjaman $peminjaman)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Peminjaman $peminjaman)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Peminjaman $peminjaman)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Peminjaman $peminjaman)
-    {
-        //
+        $this->middleware('auth');
     }
 }
